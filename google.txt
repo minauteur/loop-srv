@@ -1,2 +1,0 @@
-cse_id: 015835535942221852645:udi9r5mhipg
-API_key: AIzaSyA-dQNa_5lpjHIsCzx1kbWSgG1XkoWhfyU
