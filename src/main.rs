@@ -99,7 +99,7 @@ impl Handler for SrvResp {
                 active: false,
                 path: String::from(l_path.clone().to_str().unwrap()),
                 name: l_name.into_string().unwrap(),
-                url: format!("http://microwavemansion.com/loops/{}", l_path.file_name().unwrap().to_owned().into_string().unwrap()),
+                url: format!("https://microwavemansion.com/loops/{}", l_path.file_name().unwrap().to_owned().into_string().unwrap()),
                 img: String::new()
             };
             println!("image searching: {}", &new_loop.name);
