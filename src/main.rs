@@ -15,7 +15,7 @@ extern crate rustc_serialize;
 // use std::fs::*;
 use iron::headers::AccessControlAllowOrigin;
 use serde_json::Value;
-use iron::prelude::*;
+// use iron::prelude::*;
 use iron::request::Request;
 use iron::middleware::Handler;
 use iron::IronResult;
@@ -25,17 +25,17 @@ use iron::status::Status;
 use iron::Iron;
 use std::path::Path;
 use std::fs;
-use iron::mime;
+// use iron::mime;
 // use iron::Handler;
-use mount::Mount;
-use staticfile::Static;
+// use mount::Mount;
+// use staticfile::Static;
 use std::path::PathBuf;
 use router::Router;
 use rustc_serialize::json;
 // use reqwest;
 
-const search_base: &'static str = "https://www.googleapis.com/customsearch/v1?key=AIzaSyA-dQNa_5lpjHIsCzx1kbWSgG1XkoWhfyU&cx=015835535942221852645:udi9r5mhipg&q=";
-const search_post: &'static str = "&searchType=image&fileType=jpg&imgSize=small&alt=json";
+const SEARCH_BASE: &'static str = "https://www.googleapis.com/customsearch/v1?key=AIzaSyA-dQNa_5lpjHIsCzx1kbWSgG1XkoWhfyU&cx=015835535942221852645:udi9r5mhipg&q=";
+const SEARCH_POST: &'static str = "&searchType=image&fileType=jpg&imgSize=small&alt=json";
 
 impl Default for SrvResp {
     fn default() -> Self {
@@ -61,7 +61,7 @@ pub struct LVec {
     stored: Vec<LoopItem>
 }
 fn main() {
-    let mut fs = Mount::new();
+    // let mut fs = Mount::new();
     let mut router = Router::new();
     router.get("/", SrvResp::new(), "srvresp");
     println!("listening at localhost:5000!");
@@ -106,7 +106,7 @@ impl Handler for SrvResp {
             };
             println!("image searching: {}", &new_loop.name);
             let word: &str = &new_loop.name.as_str().split_whitespace().next().unwrap();
-            let img_url = format!("{}{}{}", search_base, &word, search_post);
+            let img_url = format!("{}{}{}", SEARCH_BASE, &word, SEARCH_POST);
             let img_req: Value = reqwest::get(&img_url).unwrap().json().unwrap();
             let items: Value = img_req.get("items").expect("couldn't find any 'items'!").clone();
             let result: ImageItem = serde_json::from_value(items[0].clone()).expect("couldn't extract link from search results!");
