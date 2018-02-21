@@ -106,10 +106,16 @@ impl Handler for SrvResp {
             };
             println!("image searching: {}", &new_loop.name);
             let word: &str = &new_loop.name.as_str().split_whitespace().next().unwrap();
-            let img_url = format!("{}{}{}", SEARCH_BASE, &word, SEARCH_POST);
-            let img_req: Value = reqwest::get(&img_url).unwrap().json().unwrap();
-            let items: Value = img_req.get("items").expect("couldn't find any 'items'!").clone();
-            let result: ImageItem = serde_json::from_value(items[0].clone()).expect("couldn't extract link from search results!");
+            let img_srch_url = format!("{}{}{}", SEARCH_BASE, &word, SEARCH_POST);
+            let img_req: Value = reqwest::get(&img_srch_url).unwrap().json().unwrap();
+            let items = img_req.get("items");
+            let mut result: ImageItem = ImageItem {
+                link: String::new(),
+            };
+            if items.is_some() {
+                result = serde_json::from_value(items.unwrap()[0].clone()).expect("couldn't extract link from search results!");
+                println!("image link: {}", &result.link);                         
+            }
             println!("image link: {}", &result.link);            
             new_loop.img = result.link;
             println!("url: {}", &new_loop.url);
