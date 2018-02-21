@@ -64,8 +64,8 @@ fn main() {
     let mut fs = Mount::new();
     let mut router = Router::new();
     router.get("/", SrvResp::new(), "srvresp");
-    println!("Hello, world!");
-    Iron::new(router).http("127.0.0.1:8080").unwrap();
+    println!("listening at localhost:5000!");
+    Iron::new(router).http("localhost:5000").unwrap();
     
 }
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -86,11 +86,11 @@ impl SrvResp {
 }
 impl Handler for SrvResp {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        let dir =  fs::read_dir("/var/www/microwavemansion.com/loops").expect("couldn't read directory!");
-        // let win_dir = fs::read_dir("C:\\Users\\Minauteur\\Desktop\\tools\\caddy_v0.10.10_windows_amd64_custom_personal\\loops").expect("couldn't read directory!");
+        // let dir =  fs::read_dir("/var/www/microwavemansion.com/loops").expect("couldn't read directory!");
+        let win_dir = fs::read_dir("C:\\Users\\Minauteur\\Desktop\\tools\\caddy_v0.10.10_windows_amd64_custom_personal\\loops").expect("couldn't read directory!");
         let mut p_vec: Vec<PathBuf> = Vec::new();
-        for path in dir {
-        // for path in win_dir {
+        // for path in dir {
+        for path in win_dir {
             let p_b = PathBuf::from(&path.unwrap().path().display().to_string());
             p_vec.push(p_b);
         }
