@@ -6,15 +6,15 @@ authors = ["minauteur <Thompennington@gmail.com>"]
 [dependencies]
 #[macro_use]
 rustc-serialize = "0.3"
-reqwest = "*"
+reqwest = "0.8.5"
 mustache = "0.8.2"
 serde = "1.0.27"
 iron = "0.6.0"
 router = "0.6.0"
 typemap = "0.3.3"
-plugin = "*" # for iron
+plugin = "0.2.6" # for iron
 #[macro_use()]
 serde_derive = "1.0.27"
 serde_json = "1.0.9"
-staticfile = "*"
-mount = "*"
+staticfile = "0.5.0"
+mount = "0.4.0"
