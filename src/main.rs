@@ -32,6 +32,7 @@ use std::fs;
 use std::path::PathBuf;
 use router::Router;
 use rustc_serialize::json;
+use std::ffi::OsStr;
 // use reqwest;
 
 const SEARCH_BASE: &'static str = "https://www.googleapis.com/customsearch/v1?key=AIzaSyA-dQNa_5lpjHIsCzx1kbWSgG1XkoWhfyU&cx=015835535942221852645:udi9r5mhipg&q=";
@@ -68,10 +69,10 @@ fn main() {
     Iron::new(router).http("localhost:5000").unwrap();
     
 }
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-struct ImageItem {
-    link: String
-}
+// #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+// struct ImageItem {
+//     link: String
+// }
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 struct SrvResp {
     file_list: Vec<PathBuf>,
@@ -96,31 +97,33 @@ impl Handler for SrvResp {
         }
         let mut loops: Vec<LoopItem> = Vec::new();        
         for l_path in p_vec {
+            if l_path.extension() == Some(&OsStr::new("wav")) {
             let l_name = Path::new(&l_path.clone()).file_stem().unwrap().to_owned();
             let mut new_loop: LoopItem = LoopItem {
                 active: false,
                 path: String::from(l_path.clone().to_str().unwrap()),
-                name: l_name.into_string().unwrap(),
+                name: l_name.clone().into_string().unwrap(),
                 url: format!("https://microwavemansion.com/loops/{}", l_path.file_name().unwrap().to_owned().into_string().unwrap()),
-                img: String::new()
+                img: format!("https://microwavemansion.com/loops/{}.png", l_name.clone().into_string().unwrap())
             };
-            println!("image searching: {}", &new_loop.name);
-            let word: &str = &new_loop.name.as_str().split_whitespace().next().unwrap();
-            let img_srch_url = format!("{}{}{}", SEARCH_BASE, &word, SEARCH_POST);
-            let img_req: Value = reqwest::get(&img_srch_url).unwrap().json().unwrap();
-            let items = img_req.get("items");
-            let mut result: ImageItem = ImageItem {
-                link: String::new(),
-            };
-            if items.is_some() {
-                result = serde_json::from_value(items.unwrap()[0].clone()).expect("couldn't extract link from search results!");
-                println!("image link: {}", &result.link);                         
-            }
-            println!("image link: {}", &result.link);            
-            new_loop.img = result.link;
+            // println!("image searching: {}", &new_loop.name);
+            // let word: &str = &new_loop.name.as_str().split_whitespace().next().unwrap();
+            // let img_srch_url = format!("{}{}{}", SEARCH_BASE, &word, SEARCH_POST);
+            // let img_req: Value = reqwest::get(&img_srch_url).unwrap().json().unwrap();
+            // let items = img_req.get("items");
+            // let mut result: ImageItem = ImageItem {
+            //     link: String::new(),
+            // };
+            // if items.is_some() {
+            //     result = serde_json::from_value(items.unwrap()[0].clone()).expect("couldn't extract link from search results!");
+            //     println!("image link: {}", &result.link);                         
+            // }
+            println!("image link: {}", &new_loop.img);            
+            // new_loop.img = result.link;
             println!("url: {}", &new_loop.url);
             println!("local path: {}", &l_path.to_str().unwrap());
             loops.push(new_loop.to_owned());
+            }
         }
         let json = json::encode(&loops).unwrap();
         // let content_type = mime::Mime(mime::TopLevel::Text, mime::SubLevel::Html, vec![]);        
