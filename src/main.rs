@@ -93,8 +93,8 @@ impl SrvResp {
 }
 impl Handler for SrvResp {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        // let dir =  fs::read_dir("/var/www/microwavemansion.com/loops").expect("couldn't read directory!");
-        let dir = fs::read_dir("C:\\Users\\Minauteur\\Desktop\\tools\\caddy_v0.10.10_windows_amd64_custom_personal\\loops").expect("couldn't read directory!");
+        let dir =  fs::read_dir("/var/www/microwavemansion.com/loops").expect("couldn't read directory!");
+        // let dir = fs::read_dir("C:\\Users\\Minauteur\\Desktop\\tools\\caddy_v0.10.10_windows_amd64_custom_personal\\loops").expect("couldn't read directory!");
         let mut p_vec: Vec<PathBuf> = Vec::new();
         let mut i_vec: Vec<PathBuf> = Vec::new();
         for entry in dir {
